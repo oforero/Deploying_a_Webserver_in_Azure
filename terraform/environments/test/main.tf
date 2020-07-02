@@ -51,6 +51,12 @@ module "publicip" {
   resource_group   = module.resource_group.resource_group_name
 }
 
+module "availabilityset" {
+  source           = "../../modules/availabilityset"
+  location         = var.location
+  resource_group   = module.resource_group.resource_group_name
+}
+
 module "vm" {
   source           = "../../modules/vm"
   location         = var.location
@@ -59,5 +65,6 @@ module "vm" {
   resource_group   = module.resource_group.resource_group_name
   vm_subnet_id = module.network.subnet_id_test
   vm_public_ip_address_id = module.publicip.public_ip_address_id
+  availability_set = module.availabilityset.availability_set_id
   number_of_vms = var.number_of_vms
 }

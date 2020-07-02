@@ -24,6 +24,7 @@ resource "azurerm_linux_virtual_machine" "test" {
   size                  = "Standard_B1s"
   admin_username        = "oscar"
   count                 = var.number_of_vms
+  availability_set_id   = var.availability_set
   network_interface_ids = [element(azurerm_network_interface.test.*.id, count.index)]
   tags = {
     job = "Webserver"
