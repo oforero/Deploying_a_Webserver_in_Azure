@@ -6,9 +6,9 @@
 
 # Resource Group/Location
 location         = "East US"
-resource_group   = "udacity-webserver"
+resource_group   = "udacity-webserver-project"
 application_type = "udacity"
-number_of_vms    = 2 
+number_of_vms    = 2
 
 # Network
 virtual_network_name = "network"

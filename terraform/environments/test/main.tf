@@ -1,4 +1,5 @@
 provider "azurerm" {
+  version = "~> 2.16"
   tenant_id       = var.tenant_id
   subscription_id = var.subscription_id
   client_id       = var.client_id
@@ -51,6 +52,13 @@ module "publicip" {
   resource_group   = module.resource_group.resource_group_name
 }
 
+module "loadbalancer" {
+  source           = "../../modules/loadbalancer"
+  location         = var.location
+  resource_group   = module.resource_group.resource_group_name
+  public_ip        = module.publicip.public_ip_address_id
+}
+
 module "availabilityset" {
   source           = "../../modules/availabilityset"
   location         = var.location
@@ -66,5 +74,6 @@ module "vm" {
   vm_subnet_id = module.network.subnet_id_test
   vm_public_ip_address_id = module.publicip.public_ip_address_id
   availability_set = module.availabilityset.availability_set_id
+  load_balancer = module.loadbalancer.load_balancer_pool_id
   number_of_vms = var.number_of_vms
 }
