@@ -1,3 +1,4 @@
+# Terraform
 **/*.tfstate
 **/*.json
 **/*.exe
@@ -23,3 +24,6 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+
+# Ignore keys
+id_rsa*
