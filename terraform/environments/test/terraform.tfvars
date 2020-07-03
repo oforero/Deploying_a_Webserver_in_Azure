@@ -8,7 +8,7 @@
 location         = "East US"
 resource_group   = "udacity-webserver-project"
 application_name = "udacity-webserver"
-number_of_vms    = 2
+number_of_vms    = 3
 
 # Network
 virtual_network_name = "network"
