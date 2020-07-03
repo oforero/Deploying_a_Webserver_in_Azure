@@ -5,7 +5,12 @@ variable location {}
 # Network
 variable virtual_network_name {}
 variable address_space {}
-variable application_type {}
-variable resource_type {}
-variable address_prefix_test {}
+variable address_prefix {}
+variable nsg_id {}
 
+# Naming
+variable resource_name {}
+variable resource_suffix {
+    type = string
+    default = "NET"
+}

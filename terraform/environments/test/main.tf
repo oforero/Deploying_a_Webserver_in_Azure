@@ -23,57 +23,54 @@ module "resource_group" {
   location       = var.location
 }
 
+module "nsg" {
+  source           = "../../modules/permissive-nsg"
+  resource_name = var.application_name
+  location         = var.location
+  resource_group   = module.resource_group.resource_group_name
+}
+
 module "network" {
   source               = "../../modules/network"
-  address_space        = var.address_space
+  resource_name        = var.application_name
   location             = var.location
-  virtual_network_name = var.virtual_network_name
-  application_type     = var.application_type
-  resource_type        = "NET"
   resource_group       = module.resource_group.resource_group_name
-  address_prefix_test  = var.address_prefix_test
-}
 
-module "nsg" {
-  source           = "../../modules/networksecuritygroup"
-  location         = var.location
-  application_type = var.application_type
-  resource_type    = "NSG"
-  resource_group   = module.resource_group.resource_group_name
-  subnet_id        = module.network.subnet_id_test
-  address_prefix_test = var.address_prefix_test
-}
-
-module "publicip" {
-  source           = "../../modules/publicip"
-  location         = var.location
-  application_type = var.application_type
-  resource_type    = "publicip"
-  resource_group   = module.resource_group.resource_group_name
+  virtual_network_name = var.virtual_network_name
+  address_space        = var.address_space
+  address_prefix       = var.address_prefix
+  nsg_id               = module.nsg.nsg_id
 }
 
 module "loadbalancer" {
   source           = "../../modules/loadbalancer"
   location         = var.location
   resource_group   = module.resource_group.resource_group_name
-  public_ip        = module.publicip.public_ip_address_id
+  resource_name    = var.application_name
 }
 
-module "availabilityset" {
-  source           = "../../modules/availabilityset"
+module "webserver" {
+  source           = "../../modules/webserver"
   location         = var.location
+  resource_name    = var.application_name
   resource_group   = module.resource_group.resource_group_name
+  vm_subnet_id     = module.network.subnet_id
+  number_of_vms    = var.number_of_vms
+  use_load_balancer     = true
+  load_balancer_pool_id = module.loadbalancer.load_balancer_pool_id
 }
 
-module "vm" {
-  source           = "../../modules/vm"
-  location         = var.location
-  # application_type = var.application_type
-  # resource_type    = "vm"
-  resource_group   = module.resource_group.resource_group_name
-  vm_subnet_id = module.network.subnet_id_test
-  vm_public_ip_address_id = module.publicip.public_ip_address_id
-  availability_set = module.availabilityset.availability_set_id
-  load_balancer = module.loadbalancer.load_balancer_pool_id
-  number_of_vms = var.number_of_vms
-}
+# module "publicip" {
+#   source           = "../../modules/publicip"
+#   location         = var.location
+#   application_type = var.application_type
+#   resource_type    = "publicip"
+#   resource_group   = module.resource_group.resource_group_name
+# }
+
+# module "availabilityset" {
+#   source           = "../../modules/availabilityset"
+#   location         = var.location
+#   resource_group   = module.resource_group.resource_group_name
+# }
+
