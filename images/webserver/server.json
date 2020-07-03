@@ -1,16 +1,18 @@
 {
 	"variables": {
+        "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
 		"client_id": "{{env `ARM_CLIENT_ID`}}",
 		"client_secret": "{{env `ARM_CLIENT_SECRET`}}",
-		"subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
-	},
+        "tenant_id": "{{env `ARM_TENANT_ID`}}"
+    },
+    
 	"builders": [{
     "type": "azure-arm",
 
+    "subscription_id": "{{user `subscription_id`}}",
     "client_id": "{{user `client_id`}}",
     "client_secret": "{{ user `client_secret`}}",
-    "tenant_id": "09ec4242-dfa8-42b4-b59a-ae7dbce9397b",
-    "subscription_id": "{{user `subscription_id`}}",
+    "tenant_id": "{{user `tenant_id`}}",
 
     "managed_image_resource_group_name": "udacity-devops",
     "managed_image_name": "my-web-server",
