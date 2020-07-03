@@ -28,15 +28,15 @@ resource "azurerm_network_security_group" "nsg" {
   }
 
   security_rule {
-    name                       = "LB-Inbound-Allow"
+    name                       = "HTTP-Inbound-Allow"
     priority                   = 4000
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "*"
+    protocol                   = "TCP"
     source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "AzureLoadBalancer"
-    destination_address_prefix = "*"
+    destination_port_range     = "8080"
+    source_address_prefix      = "*"
+    destination_address_prefix = "VirtualNetwork"
   }
 
 
@@ -64,16 +64,16 @@ resource "azurerm_network_security_group" "nsg" {
     destination_address_prefix = "VirtualNetwork"
   }
 
-  security_rule {
-    name                       = "LB-Outbound-Allow"
-    priority                   = 4000
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "AzureLoadBalancer"
-  }
+  # security_rule {
+  #   name                       = "LB-Outbound-Allow"
+  #   priority                   = 4000
+  #   direction                  = "Outbound"
+  #   access                     = "Allow"
+  #   protocol                   = "*"
+  #   source_port_range          = "*"
+  #   destination_port_range     = "*"
+  #   source_address_prefix      = "*"
+  #   destination_address_prefix = "AzureLoadBalancer"
+  # }
 }
 
