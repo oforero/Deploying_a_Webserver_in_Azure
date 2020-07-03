@@ -24,7 +24,7 @@ module "resource_group" {
 }
 
 module "nsg" {
-  source           = "../../modules/permissive-nsg"
+  source           = "../../modules/restrictive-nsg"
   resource_name = var.application_name
   location         = var.location
   resource_group   = module.resource_group.resource_group_name
