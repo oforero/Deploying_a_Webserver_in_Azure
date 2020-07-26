@@ -57,13 +57,13 @@ Tge Policy was creted using the Azure Console, not terraform.
 
 ## Create the VM image
 
-* go to the image folder: `cd images/folder`
+* go to the image folder: `cd terraform-no-modules`
 * create the image `packer build server.json`
 
 ![PACKER](Screenshots/azure-webapp-packer.png)
 
 ## Deploy the Infrastructure
-* go to the infra folder: `cd terraform/environments/test`
+* go to the infra folder: `cd terraform-no-modules/`
 * Initialize terraform: `terraform init`
 * Create the infrastructure: `terraform apply` 
 
