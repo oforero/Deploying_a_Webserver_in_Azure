@@ -6,7 +6,7 @@
 
 # Resource Group/Location
 location         = "East US"
-resource_group   = "udacity-devops"
+resource_group   = "udacity-webserver-project"
 application_name = "udacity-webserver"
 number_of_vms    = 3
 
