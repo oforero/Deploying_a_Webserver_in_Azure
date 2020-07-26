@@ -60,7 +60,7 @@ Tge Policy was creted using the Azure Console, not terraform.
 * go to the image folder: `cd images/folder`
 * create the image `packer build server.json`
 
-![PACKER_SCREENSHOT](Screenshots/azure-webapp-packer.png)
+![PACKER](Screenshots/azure-webapp-packer.png)
 
 ## Deploy the Infrastructure
 * go to the infra folder: `cd terraform/environments/test`
