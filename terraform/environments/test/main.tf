@@ -8,12 +8,8 @@ provider "azurerm" {
 }
 
 terraform {
-  backend "azurerm" {
-    resource_group_name  = "udacity-devops"
-    storage_account_name = "oforeroterraform"
-    container_name       = "terraform"
-    key                  = "9mGB2WFwLvj3E9zGS+NheXLox5qT2Rj5b0qIQ4F1OnDlCcQ/C+MYbTbAmtWuLstAUe9HrytTjPBHscecr3fR6Q=="
-    access_key           = ""
+  backend "local" {
+    path = ".terraform/terraform.tfstate"
   }
 }
 
