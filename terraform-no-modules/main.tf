@@ -13,7 +13,7 @@ terraform {
   }
 }
 
-resource "azurerm_resource_group" "test" {
+resource "azurerm_resource_group" "rg" {
   name     = var.resource_group
   location = var.location
 }
@@ -21,7 +21,7 @@ resource "azurerm_resource_group" "test" {
 resource "azurerm_network_security_group" "nsg" {
   name                = "${var.application_name}-NSG"
   location            = var.location
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
 
   security_rule {
     name                       = "AllInbound-Deny"
@@ -89,12 +89,12 @@ resource "azurerm_virtual_network" "network" {
   name                 = "${var.application_name}-NET"
   address_space        = var.address_space
   location             = var.location
-  resource_group_name  = var.resource_group
+  resource_group_name  = azurerm_resource_group.rg.name
 }
 
 resource "azurerm_subnet" "subnet" {
   name                 = "${var.application_name}-SUBNET"
-  resource_group_name  = var.resource_group
+  resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.network.name
   address_prefixes     = [var.address_prefix]
 }
@@ -107,7 +107,7 @@ resource "azurerm_subnet_network_security_group_association" "test" {
 resource "azurerm_public_ip" "lb" {
   name                = "${var.application_name}-LB-pubip"
   location            = var.location
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
   sku = "Standard"
 }
@@ -115,7 +115,7 @@ resource "azurerm_public_ip" "lb" {
 resource "azurerm_lb" "lb" {
   name                = "${var.application_name}-lb"
   location            = var.location
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
   sku = "Standard"
   
   frontend_ip_configuration {
@@ -126,20 +126,20 @@ resource "azurerm_lb" "lb" {
 
 resource "azurerm_lb_backend_address_pool" "pool" {
   name                = "${var.application_name}-lbpool"
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
   loadbalancer_id     = azurerm_lb.lb.id
 }
 
 resource "azurerm_lb_probe" "probe" {
   name                = "${var.application_name}-probe"
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
   loadbalancer_id     = azurerm_lb.lb.id
   port                = 8080
 }
 
 resource "azurerm_lb_rule" "rule" {
   name                           = "${var.application_name}-rule"
-  resource_group_name            = var.resource_group
+  resource_group_name            = azurerm_resource_group.rg.name
   loadbalancer_id                = azurerm_lb.lb.id
   protocol                       = "Tcp"
   frontend_port                  = 80
@@ -152,7 +152,7 @@ resource "azurerm_lb_rule" "rule" {
 resource "azurerm_public_ip" "ip" {
   name                = "${var.application_name}-vm-pubip-${count.index}"
   location            = var.location
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
   count               = var.number_of_vms  
   allocation_method   = "Static"
   sku = "Standard"
@@ -161,14 +161,14 @@ resource "azurerm_public_ip" "ip" {
 resource "azurerm_availability_set" "as" {
   name                = "availability-set"
   location            = var.location
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
 resource "azurerm_network_interface" "nic" {
   count = var.number_of_vms
   name                = "ProjectVM-eth0-${count.index}"
   location            = var.location
-  resource_group_name = var.resource_group
+  resource_group_name = azurerm_resource_group.rg.name
 
   ip_configuration {
     name                          = "internal"
@@ -190,7 +190,7 @@ resource "azurerm_linux_virtual_machine" "vms" {
   count                 = var.number_of_vms
   name                  = "ProjectVM-${count.index}"
   location              = var.location
-  resource_group_name   = var.resource_group
+  resource_group_name   = azurerm_resource_group.rg.name
   size                  = "Standard_B1s"
   admin_username        = "oscar"
   availability_set_id   = azurerm_availability_set.as.id
