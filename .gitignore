@@ -30,3 +30,7 @@ override.tf.json
 
 # ignore keys
 id_rsa*
+*.pem
+
+# ignore MacOS specific files
+.DS_Store
