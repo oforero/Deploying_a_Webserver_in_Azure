@@ -16,6 +16,7 @@ To deploy the applications yourself you have to do the following steps:
 ## Get your Azure Credentials
 * Login into azure `az login`
 * Create an rbac for loging in: `az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<subscription_id>"`
+* Copy the client secret, we'll need it later.
 * List your credentials: `az account show`
 
 ```
@@ -35,30 +36,40 @@ To deploy the applications yourself you have to do the following steps:
 }
 ```
 
+## Set the Credentials in Environment Variables
 
-## Create the VM image
-* Set the ARM_environment variables
+Terraform requires them to be prefixed with TF_VAR, to minimize the work, we'll use the same variables for packer.
 
-```
-$ export ARM_APP_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
-$ export ARM_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
-$ export ARM_CLIENT_SECRET=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
-$ export ARM_SUBSCRIPTION_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
-$ export ARM_TENANT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
-```
-* go to the image folder: `cd images/folder`
-* create the image `packer build server.json`
+**keep in mind that the names are case sensitive**
 
-## Deploy the Infrastructure
-* Set the in TF_VAR_ environment variables, **keep in mind that the names are case sensitive**
 ```
 $ export TF_VAR_subscription_id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
 $ export TF_VAR_client_id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
 $ export TF_VAR_client_secret=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
 $ export TF_VAR_tenant_id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
 ```
+
+## Policy Creation
+
+Tge Policy was creted using the Azure Console, not terraform.
+
+![Azure Policy](Screenshots/azure-webapp-policy.png)
+
+## Create the VM image
+
+* go to the image folder: `cd images/folder`
+* create the image `packer build server.json`
+
+![PACKER_SCREENSHOT](Screenshots/azure-webapp-packer.png)
+
+## Deploy the Infrastructure
 * go to the infra folder: `cd terraform/environments/test`
-* create the infrastructure: `terraform apply` 
+* Initialize terraform: `terraform init`
+* Create the infrastructure: `terraform apply` 
+
+![TERRAFORM APPLY 1](Screenshots/azure-webapp-terraform_apply_1.png)
+
+![TERRAFORM APPLY 2](Screenshots/azure-webapp-terraform_apply_2.png)
 
 ## Customizing your rollout
 
